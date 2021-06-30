@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Container, Menu, MenuItem } from 'semantic-ui-react';
+import { Button, Container, Menu } from 'semantic-ui-react';
 
 interface Props {
     openForm: () => void;
