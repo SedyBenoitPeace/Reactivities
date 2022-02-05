@@ -22,7 +22,7 @@ export default class ActivityStore {
     loadActivities = async () => {
         try {
             const activities = await agent.Activities.list();
-            activities.forEach(activity => {
+            activities.forEach((activity: Activity) => {
                 activity.date = activity.date.split('T')[0];
                 this.activityRegistry.set(activity.id, activity);
             })
