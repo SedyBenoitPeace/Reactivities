@@ -1,5 +1,7 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { Activity } from '../models/activity';
+import { toast } from "react-toastify";
+import { history } from "../..";
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -9,13 +11,26 @@ const sleep = (delay: number) => {
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 axios.interceptors.response.use(async response => {
-    try {
-        await sleep(1000);
-        return response;
-    } catch (error) {
-        console.log(error);
-        return await Promise.reject(error);
+    await sleep(1000);
+    return response;
+}, (error: AxiosError) => {
+    const { data, status } = error.response!;
+    switch (status) {
+        case 400:
+            toast.error('bad request');
+            break;
+        case 401:
+            toast.error('unauthorized');
+            break;
+        case 404:
+            toast.error('not found');
+            history.push('not-found');
+            break;
+        case 400:
+            toast.error('server error');
+            break;
     }
+    return Promise.reject(error);
 })
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
@@ -29,7 +44,7 @@ const requests = {
 
 const Activities = {
     list: () => requests.get<Activity[]>('/activities'),
-    details: (id : string) => requests.get<Activity>(`/activities/${id}`),
+    details: (id: string) => requests.get<Activity>(`/activities/${id}`),
     create: (activity: Activity) => axios.post<void>('/activities', activity),
     update: (activity: Activity) => axios.put<void>(`/activities/${activity.id}`, activity),
     delete: (id: string) => axios.delete<void>(`/activities/${id}`)
