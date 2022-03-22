@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { Activity } from '../models/activity';
 import { toast } from "react-toastify";
 import { history } from "../..";
+import { store } from "../stores/store";
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -14,10 +15,24 @@ axios.interceptors.response.use(async response => {
     await sleep(1000);
     return response;
 }, (error: AxiosError) => {
-    const { data, status } = error.response!;
+    const { data, status, config } = error.response!;
     switch (status) {
         case 400:
-            toast.error('bad request');
+            if (typeof data === 'string') {
+                toast.error(data);
+            }
+            if (config.method == 'get' && data.errors.hasOwnProperty('id')) {
+                history.push('/not-found');
+            }
+            if (data.errors) {
+                const modelStateErrors = [];
+                for (const key in data.errors) {
+                    if (data.errors[key]) {
+                        modelStateErrors.push(data.errors[key])
+                    }
+                }
+                throw modelStateErrors.flat();
+            }
             break;
         case 401:
             toast.error('unauthorized');
@@ -26,8 +41,9 @@ axios.interceptors.response.use(async response => {
             toast.error('not found');
             history.push('not-found');
             break;
-        case 400:
-            toast.error('server error');
+        case 500:
+            store.commonStore.setServerError(data);
+            history.push('/server-error');
             break;
     }
     return Promise.reject(error);
