@@ -11,6 +11,7 @@ import { ToastContainer } from 'react-toastify';
 import NotFound from '../../features/errors/NotFound';
 import TestErrors from '../../features/errors/TestErrors';
 import ServerError from '../../features/errors/ServerError';
+import LoginForm from '../../features/users/LoginForm';
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
             <Route path='/errors' element={<TestErrors />} />
             <Route path='/not-found' element={<NotFound />} />
             <Route path='/server-error' element={<ServerError />} />
+            <Route path='/login' element={<LoginForm />} />
           </Route>
         </Routes>
       </Container>
