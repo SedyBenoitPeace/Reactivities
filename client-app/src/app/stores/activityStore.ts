@@ -173,9 +173,20 @@ export default class ActivityStore {
             })
         } catch (error) {
             console.log(error);
-        } finally{
+        } finally {
             runInAction(() => this.loading = false);
         }
+    }
+
+    updateAttendeeFollowing = (username: string) => {
+        this.activityRegistry.forEach(activity => {
+            activity.attendees.forEach(attendee => {
+                if (attendee.username === username) {
+                    attendee.following ? attendee.followersCount-- : attendee.followersCount++;
+                    attendee.following = !attendee.following;
+                }
+            })
+        })
     }
 
     clearSelectedActivity = () => {
