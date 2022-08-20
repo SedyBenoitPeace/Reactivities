@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Persistence;
 
+
 namespace API.Extensions
 {
     public static class ApplicationServiceExtensions
@@ -23,7 +24,7 @@ namespace API.Extensions
             });
             services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlite(config.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(config.GetConnectionString("DefaultConnection"));
             });
 
             services.AddCors(options => {
