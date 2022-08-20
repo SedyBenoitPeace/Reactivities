@@ -8,8 +8,9 @@ import 'semantic-ui-css/semantic.min.css';
 import App from './app/layout/App';
 import reportWebVitals from './reportWebVitals';
 import { store, StoreContext } from './app/stores/store';
-import {createBrowserHistory} from 'history';
-import {unstable_HistoryRouter as HistoryRouter} from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import { unstable_HistoryRouter as HistoryRouter } from 'react-router-dom';
+import ScrollToTop from './app/layout/ScrollToTop';
 
 export const history = createBrowserHistory();
 
@@ -17,7 +18,8 @@ export const history = createBrowserHistory();
 ReactDOM.render(
   <StoreContext.Provider value={store}>
     <HistoryRouter history={history}>
-        <App />
+      <ScrollToTop />
+      <App />
     </HistoryRouter>
   </StoreContext.Provider>,
   document.getElementById('root')

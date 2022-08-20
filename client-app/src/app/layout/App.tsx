@@ -11,11 +11,11 @@ import { ToastContainer } from 'react-toastify';
 import NotFound from '../../features/errors/NotFound';
 import TestErrors from '../../features/errors/TestErrors';
 import ServerError from '../../features/errors/ServerError';
-import LoginForm from '../../features/users/LoginForm';
 import { useStore } from '../stores/store';
 import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
 import ProfilePage from '../../features/profile/ProfilePage';
+import PrivateRoute from './PrivateRoute';
 
 function App() {
 
@@ -30,7 +30,7 @@ function App() {
     }
   }, [commonStore, userStore]);
 
-  if(!commonStore.appLoaded) return <LoadingComponent content='Loading...'/>;
+  if (!commonStore.appLoaded) return <LoadingComponent content='Loading...' />;
 
   return (
     <Fragment>
@@ -40,23 +40,28 @@ function App() {
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route element={<Navbar />}>
-            <Route path='/activities' element={<ActivityDashboard />} />
-            <Route path='/activities/:id' element={<ActivityDetails />} />
-            {["/createActivity", "/manage/:id"].map((path) => {
+            <Route path='/activities' element={<PrivateRoute children={<ActivityDashboard />} />} />
+            <Route path='/activities/:id' element={<PrivateRoute children={<ActivityDetails />} />} />
+            {/* {["/createActivity", "/manage/:id"].map((path) => {
               return (
                 <Route key={location.key} path={path} element={<ActivityForm key={location.key} />} />
               );
+            })} */}
+            {["/createActivity", "/manage/:id"].map((path) => {
+              return (
+                <Route key={location.key} path={path} element={<PrivateRoute children={<ActivityForm key={location.key} />} />} />
+              );
             })}
-            <Route path='/profiles/:username' element={<ProfilePage />} />
-            <Route path='/errors' element={<TestErrors />} />
-            <Route path='/not-found' element={<NotFound />} />
-            <Route path='/server-error' element={<ServerError />} />
-            <Route path='/login' element={<LoginForm />} />
+            <Route path='/profiles/:username' element={<PrivateRoute children={<ProfilePage />} />} />
+            <Route path='/errors' element={<PrivateRoute children={<TestErrors />} />} />
+            <Route path='/server-error' element={<PrivateRoute children={<ServerError />} />} />
+            {/* <Route path='/not-found' element={<NotFound />} /> */}
           </Route>
         </Routes>
       </Container>
     </Fragment>
   );
 }
+
 
 export default observer(App);
