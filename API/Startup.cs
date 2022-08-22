@@ -50,14 +50,18 @@ namespace API
             app.UseXXssProtection(options => options.EnabledWithBlockMode());
             app.UseXfo(options => options.Deny());
 
-            app.UseCsp(options => options
+            app.UseCspReportOnly(options => options
                 .BlockAllMixedContent()
                 .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com"))
                 .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
                 .FormActions(s => s.Self())
                 .FrameAncestors(s => s.Self())
-                .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com"))
-                .ScriptSources(s => s.Self())
+                .ImageSources(s => s.Self().CustomSources(
+                    "https://res.cloudinary.com",
+                    "https://www.facebook.com",
+                    "https://platform-lookaside.fbsx.com"))
+                .ScriptSources(s => s.Self().CustomSources(
+                    "https://connect.facebook.com"))
             );
 
             if (env.IsDevelopment())
