@@ -52,14 +52,14 @@ namespace API
 
             app.UseCsp(options => options
                 .BlockAllMixedContent()
-                .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com"))
+                .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com", "sha256-yR2gSI6BIICdRRE2IbNP1SJXeA5NYPbaM32i/Y8eS9o="))
                 .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
                 .FormActions(s => s.Self())
                 .FrameAncestors(s => s.Self())
                 .ImageSources(s => s.Self().CustomSources(
                     "https://res.cloudinary.com",
                     "https://www.facebook.com",
-                    "https://platform-lookaside.fbsx.com"))
+                    "'https://platform-lookaside.fbsbx.com"))
                 .ScriptSources(s => s.Self().CustomSources(
                     "https://connect.facebook.net",
                     "sha256-ynlrWxF/D1vebuto1EqQlncJkA9zYOAG/rAGDj4rmEk="))
