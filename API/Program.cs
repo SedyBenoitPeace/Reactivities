@@ -25,20 +25,20 @@ app.UseXXssProtection(options => options.EnabledWithBlockMode());
 app.UseXfo(options => options.Deny());
 
 
-// app.UseCsp(opt => opt
-//     .BlockAllMixedContent()
-//     .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com", "sha256-yR2gSI6BIICdRRE2IbNP1SJXeA5NYPbaM32i/Y8eS9o="))
-//     .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
-//     .FormActions(s => s.Self())
-//     .FrameAncestors(s => s.Self())
-//     .ImageSources(s => s.Self().CustomSources(
-//         "https://res.cloudinary.com",
-//         "https://www.facebook.com",
-//         "https://platform-lookaside.fbsbx.com", "data:"))
-//     .ScriptSources(s => s.Self().CustomSources(
-//         "https://connect.facebook.net",
-//         "sha256-ynlrWxF/D1vebuto1EqQlncJkA9zYOAG/rAGDj4rmEk="))
-// );
+app.UseCsp(opt => opt
+    .BlockAllMixedContent()
+    .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com").UnsafeInline())
+    .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
+    .FormActions(s => s.Self())
+    .FrameAncestors(s => s.Self())
+    .ImageSources(s => s.Self().CustomSources(
+        "https://res.cloudinary.com",
+        "https://www.facebook.com",
+        "https://platform-lookaside.fbsbx.com", "data:"))
+    .ScriptSources(s => s.Self().CustomSources(
+        "https://connect.facebook.net").UnsafeInline())
+);
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -53,22 +53,6 @@ else
         await next.Invoke();
     });
 }
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
-}
-else
-{
-    // app.UseHsts();
-    app.Use(async (context, next) =>
-    {
-        context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
-        await next.Invoke();
-    });
-}
-
 
 //app.UseRouting(); exists already
 

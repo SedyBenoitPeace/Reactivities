@@ -34,9 +34,9 @@ export default class UserStore {
   };
 
   logout = () => {
-    this.user = null;
     store.commonStore.setToken(null);
     window.localStorage.removeItem("jwt");
+    this.user = null;
     router.navigate("/");
   };
 
@@ -128,8 +128,8 @@ export default class UserStore {
   private startRefreshTokenTimer(user: User) {
     const jwtToken = JSON.parse(atob(user.token.split(".")[1]));
     const expires = new Date(jwtToken.exp * 1000);
-    const timeout = expires.getTime() - Date.now() - 900 * 1000;
-    // const timeout = expires.getTime() - Date.now() - (604800 * 1000);
+    // timeout impostato a 60 secondi prima dell'expiration del token
+    const timeout = expires.getTime() - Date.now() - 60 * 1000;
     this.refreshTokenTimeout = setTimeout(this.refreshToken, timeout);
   }
 

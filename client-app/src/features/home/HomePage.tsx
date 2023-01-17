@@ -33,7 +33,7 @@ export default observer(function HomePage() {
                         <Divider horizontal inverted>
                             Or
                         </Divider>
-                        <Button loading={userStore.fbLoading} size='huge' inverted color="facebook" content='Login with Facebook' onClick={userStore.facebookLogin}/>
+                        {/* <Button loading={userStore.fbLoading} size='huge' inverted color="facebook" content='Login with Facebook' onClick={userStore.facebookLogin}/> */}
                     </>
                 )}
             </Container>
